@@ -13,7 +13,7 @@ export PYBUILD_INSTALL_ARGS_python3=
 override_dh_auto_test:
 	mkdir -p $(CURDIR)/build/.gramps; \
 	HOME=$(CURDIR)/build \
-	nosetests3 -vv \
+	nosetests3 --verbosity=3 \
 	--exclude=TestcaseGenerator \
 	--exclude=test4_arbitrary_uncode_path \
 	--exclude-dir=gramps/plugins/test/ \
