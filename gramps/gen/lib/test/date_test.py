@@ -1812,31 +1812,39 @@ class SortKeyTest(BaseDateTest):
     def test_modifier_score_ordering(self):
         # before < none < about < after for the same JDN
         before = self._make(Date.MOD_BEFORE, month=6, day=15)
-        exact = self._make(Date.MOD_NONE,   month=6, day=15)
-        about = self._make(Date.MOD_ABOUT,  month=6, day=15)
-        after = self._make(Date.MOD_AFTER,  month=6, day=15)
+        exact = self._make(Date.MOD_NONE, month=6, day=15)
+        about = self._make(Date.MOD_ABOUT, month=6, day=15)
+        after = self._make(Date.MOD_AFTER, month=6, day=15)
         self.assertLess(before.get_sort_key(), exact.get_sort_key())
-        self.assertLess(exact.get_sort_key(),  about.get_sort_key())
-        self.assertLess(about.get_sort_key(),  after.get_sort_key())
+        self.assertLess(exact.get_sort_key(), about.get_sort_key())
+        self.assertLess(about.get_sort_key(), after.get_sort_key())
 
     def test_span_range_same_modifier_score_as_none(self):
         # span and range share modifier score 1 with MOD_NONE
         exact = self._make(Date.MOD_NONE, month=1, day=1)
         span = Date()
-        span.set(Date.QUAL_NONE, Date.MOD_SPAN, Date.CAL_GREGORIAN,
-                 (1, 1, 1902, False, 31, 12, 1902, False))
+        span.set(
+            Date.QUAL_NONE,
+            Date.MOD_SPAN,
+            Date.CAL_GREGORIAN,
+            (1, 1, 1902, False, 31, 12, 1902, False),
+        )
         rng = Date()
-        rng.set(Date.QUAL_NONE, Date.MOD_RANGE, Date.CAL_GREGORIAN,
-                (1, 1, 1902, False, 31, 12, 1902, False))
+        rng.set(
+            Date.QUAL_NONE,
+            Date.MOD_RANGE,
+            Date.CAL_GREGORIAN,
+            (1, 1, 1902, False, 31, 12, 1902, False),
+        )
         self.assertEqual(span.get_sort_key(), exact.get_sort_key())
-        self.assertEqual(rng.get_sort_key(),  exact.get_sort_key())
+        self.assertEqual(rng.get_sort_key(), exact.get_sort_key())
 
     def test_quality_score_ordering(self):
         # within the same modifier: none < estimated < calculated
         exact = self._make(Date.MOD_NONE, quality=Date.QUAL_NONE)
         estimated = self._make(Date.MOD_NONE, quality=Date.QUAL_ESTIMATED)
         calculated = self._make(Date.MOD_NONE, quality=Date.QUAL_CALCULATED)
-        self.assertLess(exact.get_sort_key(),     estimated.get_sort_key())
+        self.assertLess(exact.get_sort_key(), estimated.get_sort_key())
         self.assertLess(estimated.get_sort_key(), calculated.get_sort_key())
 
     def test_all_twelve_combinations_distinct(self):
@@ -1856,7 +1864,7 @@ class SortKeyTest(BaseDateTest):
         about_est = self._make(Date.MOD_ABOUT, quality=Date.QUAL_ESTIMATED)
         about_calc = self._make(Date.MOD_ABOUT, quality=Date.QUAL_CALCULATED)
         self.assertLess(about_none.get_sort_key(), about_est.get_sort_key())
-        self.assertLess(about_est.get_sort_key(),  about_calc.get_sort_key())
+        self.assertLess(about_est.get_sort_key(), about_calc.get_sort_key())
 
     def test_year_only_after_sorts_past_end_of_year(self):
         after_year = self._make(Date.MOD_AFTER)  # year-only, month=0, day=0
@@ -1864,7 +1872,7 @@ class SortKeyTest(BaseDateTest):
         self.assertGreater(after_year.get_sort_key(), dec31.get_sort_key())
 
     def test_after_full_date_sorts_after_exact_same_date(self):
-        exact = self._make(Date.MOD_NONE,  month=6, day=15)
+        exact = self._make(Date.MOD_NONE, month=6, day=15)
         after = self._make(Date.MOD_AFTER, month=6, day=15)
         self.assertGreater(after.get_sort_key(), exact.get_sort_key())
 
