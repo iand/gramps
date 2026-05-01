@@ -126,6 +126,17 @@
     </dependencies>
   </autotools>
 
+ <autotools id="goocanvas2"
+             supports-non-srcdir-builds="no">
+    <branch module="goocanvas/2.0/goocanvas-2.0.4.tar.xz"
+            version="2.0.4"
+            hash="sha256:c728e2b7d4425ae81b54e1e07a3d3c8a4bd6377a63cffa43006045bceaa92e90"
+            repo="ftp.gnome.org" />
+    <after>
+      <dep package="gtk+-3.0" />
+    </after>
+  </autotools>
+
   <cmake id="exiv2" cmakeargs='-DEXIV2_ENABLE_PNG=ON -DEXIV2_ENABLE_BROTLI=OFF -DEXIV2_ENABLE_INIH=OFF -DCMAKE_MACOSX_RPATH=OFF -DCMAKE_INSTALL_NAME_DIR="${JHBUILD_PREFIX}/lib"'>
     <branch module="Exiv2/exiv2/archive/refs/tags/v0.28.8.tar.gz"
             repo="github-tarball"
@@ -241,6 +252,7 @@
       <dep package="orjson"/>
       <dep package='requests'/>
       <dep package="osmgpsmap"/>
+      <dep package="goocanvas2"/>
       <dep package="pillow"/>
       <dep package="pybsddb"/>
       <dep package="pycairo"/>
