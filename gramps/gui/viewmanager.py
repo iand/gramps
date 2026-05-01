@@ -118,6 +118,8 @@ from gramps.gen.lib import (
     Event,
     EventType,
     ChildRef,
+    DNATest,
+    DNAMatch,
 )
 from gramps.gui.editors import (
     EditPerson,
@@ -129,6 +131,8 @@ from gramps.gui.editors import (
     EditRepository,
     EditCitation,
     EditEvent,
+    EditDNATest,
+    EditDNAMatch,
 )
 from gramps.gen.db.exceptions import DbWriteFailure
 from gramps.gen.filters import reload_custom_filters
@@ -519,6 +523,8 @@ class ViewManager(CLIManager):
             ("RepositoryAdd", self.add_new_repository, "<shift><Alt>r"),
             ("MediaAdd", self.add_new_media, "<shift><Alt>m"),
             ("NoteAdd", self.add_new_note, "<shift><Alt>n"),
+            ("DNATestAdd", self.add_new_dnatest),
+            ("DNAMatchAdd", self.add_new_dnamatch),
             ("UndoHistory", self.undo_history, "<PRIMARY>H"),
             # --------------------------------------
             ("Import", self.import_data, "<PRIMARY>i"),
@@ -1489,6 +1495,20 @@ class ViewManager(CLIManager):
         """Add a new note to the note list"""
         try:
             EditNote(self.dbstate, self.uistate, [], Note())
+        except WindowActiveError:
+            pass
+
+    def add_new_dnatest(self, *obj):
+        """Add a new DNA test"""
+        try:
+            EditDNATest(self.dbstate, self.uistate, [], DNATest())
+        except WindowActiveError:
+            pass
+
+    def add_new_dnamatch(self, *obj):
+        """Add a new DNA match"""
+        try:
+            EditDNAMatch(self.dbstate, self.uistate, [], DNAMatch())
         except WindowActiveError:
             pass
 
