@@ -240,8 +240,8 @@ register(
         "Repositories",
         "Media",
         "Notes",
-        "DNAMatches",
         "DNATests",
+        "DNAMatches",
     ],
 )
 register("interface.filter", False)

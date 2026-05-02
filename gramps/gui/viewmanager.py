@@ -365,6 +365,8 @@ class ViewManager(CLIManager):
             "Repository",
             "Note",
             "Media",
+            "DNATest",
+            "DNAMatch",
         ):
             self.uistate.register(self.dbstate, nav_type, 0)
 
