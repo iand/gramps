@@ -158,16 +158,6 @@
     </dependencies>
   </meson>
 
-  <pip id="pyexiv">
-    <branch module="71/92/1f934a1dc0d0a00e29916b6949cc51c91833339f82d98014b800c3de1aac/exiv-0.2.tar.gz"
-            version="0.2"
-            hash="sha256:ef60b8325f1ccb92ccccf97389254955968fefa607516b243dd5d5b506e5fb4c"
-            repo="pymodules"/>
-    <dependencies>
-      <dep package="gexiv2"/>
-    </dependencies>
-  </pip>
-
   <pip id="pillow">
     <branch module="8c/21/c2bcdd5906101a30244eaffc1b6e6ce71a31bd0742a01eb89e660ebfac2d/pillow-12.2.0.tar.gz"
             version="12.2.0"
