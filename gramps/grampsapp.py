@@ -466,7 +466,7 @@ def show_settings():
         geocodeglib_ver = _("not found")
 
     try:
-        import bsddb3 as bsddb
+        import berkeleydb as bsddb
 
         bsddb_str = bsddb.__version__
         bsddb_db_str = (
@@ -475,7 +475,7 @@ def show_settings():
         bsddb_location_str = bsddb.__file__
     except:
         try:
-            import berkeleydb as bsddb
+            import bsddb3 as bsddb
 
             bsddb_str = bsddb.__version__
             bsddb_db_str = (
