@@ -47,6 +47,7 @@ from ._hassharedancestor import HasSharedAncestor
 from ._hasnosharedancestors import HasNoSharedAncestors
 from ._matchessubjecttestfilter import MatchesSubjectTestFilter
 from ._matchesmatchtestfilter import MatchesMatchTestFilter
+from ._sharessegmentwithmatch import SharesSegmentWithMatch
 
 editor_rule_list: list[type] = [
     AllDNAMatches,
@@ -70,4 +71,5 @@ editor_rule_list: list[type] = [
     HasNoSharedAncestors,
     MatchesSubjectTestFilter,
     MatchesMatchTestFilter,
+    SharesSegmentWithMatch,
 ]
