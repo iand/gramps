@@ -40,7 +40,7 @@ from ._hassubjectpersonname import HasSubjectPersonName
 from ._hasmatchpersonname import HasMatchPersonName
 from ._hasprovider import HasProvider
 from ._hassharedcm import HasSharedCm
-from ._haschromosome import HasChromosome
+from ._hassegment import HasSegment
 from ._hasmatchperson import HasMatchPerson
 from ._hassubjectperson import HasSubjectPerson
 from ._hassharedancestor import HasSharedAncestor
@@ -61,7 +61,7 @@ editor_rule_list: list[type] = [
     HasAttribute,
     MatchesFilter,
     HasSharedCm,
-    HasChromosome,
+    HasSegment,
     HasMatchPerson,
     HasSubjectPerson,
     HasSharedAncestor,
