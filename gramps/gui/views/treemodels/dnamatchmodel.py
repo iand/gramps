@@ -69,13 +69,12 @@ class DNAMatchModel(FlatBaseModel):
       6  Weighted largest segment cM
       7  Percent shared
       8  Segment count
-      9  Predicted relationship
-     10  Predicted relationship probability
-     11  Shared ancestors count
-     12  Private
-     13  Tags
-     14  Last changed
-     15  Tag color (model-only, not displayed)
+      9  Predicted relationship, with probability and alternative count
+     10  Shared ancestors count
+     11  Private
+     12  Tags
+     13  Last changed
+     14  Tag color (model-only, not displayed)
     """
 
     def __init__(
@@ -102,7 +101,6 @@ class DNAMatchModel(FlatBaseModel):
             self.column_percent_shared,
             self.column_seg_count,
             self.column_predicted_rel,
-            self.column_pred_prob,
             self.column_shared_ancestors,
             self.column_private,
             self.column_tags,
@@ -120,7 +118,6 @@ class DNAMatchModel(FlatBaseModel):
             self.sort_percent_shared,
             self.sort_seg_count,
             self.column_predicted_rel,
-            self.sort_pred_prob,
             self.sort_shared_ancestors,
             self.column_private,
             self.column_tags,
@@ -147,7 +144,7 @@ class DNAMatchModel(FlatBaseModel):
         """
         Return the color column index.
         """
-        return 15
+        return 14
 
     def on_get_n_columns(self):
         return len(self.fmap) + 1
@@ -226,34 +223,34 @@ class DNAMatchModel(FlatBaseModel):
     def sort_seg_count(self, data):
         return "%010d" % (int(data.segment_count) if data.segment_count else 0)
 
-    def column_predicted_rel(self, data):
-        lst = data.predicted_relationship_list
-        if not lst:
-            return ""
-        descriptions = [rel.description for rel in lst if rel.description]
-        text = descriptions[0] if descriptions else _("(unnamed)")
-        if len(lst) > 1:
-            text += " (+%d)" % (len(lst) - 1)
-        return text
+    def _primary_prediction(self, data):
+        """
+        Return the prediction the row describes.
 
-    def _best_probability(self, data):
+        A match may hold several predictions when the relationship is
+        uncertain. The most probable one is shown, falling back to the first
+        when no prediction carries a probability.
+        """
         lst = data.predicted_relationship_list
         if not lst:
             return None
-        probs = [rel.probability for rel in lst if rel.probability]
-        return max(probs) if probs else None
+        best = None
+        for rel in lst:
+            if rel.probability and (best is None or rel.probability > best.probability):
+                best = rel
+        return best if best is not None else lst[0]
 
-    def column_pred_prob(self, data):
-        val = self._best_probability(data)
-        if val is None:
+    def column_predicted_rel(self, data):
+        rel = self._primary_prediction(data)
+        if rel is None:
             return ""
-        return "%g%%" % val
-
-    def sort_pred_prob(self, data):
-        val = self._best_probability(data)
-        if val is None:
-            return "99999.9999"
-        return "%010.4f" % val
+        text = rel.description or _("(unnamed)")
+        if rel.probability:
+            text += " (%g%%)" % rel.probability
+        count = len(data.predicted_relationship_list) - 1
+        if count:
+            text += " (+%d)" % count
+        return text
 
     def column_shared_ancestors(self, data):
         lst = data.shared_ancestor_list

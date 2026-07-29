@@ -70,11 +70,10 @@ class DNAMatchView(ListView):
     COL_PERCENT_SHARED = 7
     COL_SEG_COUNT = 8
     COL_PREDICTED_REL = 9
-    COL_PRED_PROB = 10
-    COL_SHARED_ANCS = 11
-    COL_PRIV = 12
-    COL_TAGS = 13
-    COL_CHAN = 14
+    COL_SHARED_ANCS = 10
+    COL_PRIV = 11
+    COL_TAGS = 12
+    COL_CHAN = 13
 
     COLUMNS = [
         (_("ID"), TEXT, None),
@@ -87,7 +86,6 @@ class DNAMatchView(ListView):
         (_("Percent shared"), TEXT, None),
         (_("Segment count"), TEXT, None),
         (_("Predicted relationship"), TEXT, None),
-        (_("Probability"), TEXT, None),
         (_("Shared ancestors"), TEXT, None),
         (_("Private"), ICON, "gramps-lock"),
         (_("Tags"), TEXT, None),
@@ -118,7 +116,6 @@ class DNAMatchView(ListView):
                 COL_PERCENT_SHARED,
                 COL_SEG_COUNT,
                 COL_PREDICTED_REL,
-                COL_PRED_PROB,
                 COL_SHARED_ANCS,
                 COL_PRIV,
                 COL_TAGS,
@@ -127,7 +124,7 @@ class DNAMatchView(ListView):
         ),
         (
             "columns.size",
-            [75, 200, 200, 75, 75, 75, 75, 75, 75, 120, 75, 75, 40, 100, 100],
+            [75, 200, 200, 75, 75, 75, 75, 75, 75, 160, 75, 40, 100, 100],
         ),
     )
 
