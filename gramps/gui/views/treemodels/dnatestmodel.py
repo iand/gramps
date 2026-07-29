@@ -45,7 +45,7 @@ from gi.repository import Gtk
 from gramps.gen.datehandler import format_time
 from gramps.gen.const import GRAMPS_LOCALE as glocale
 from gramps.gen.display.name import displayer as name_displayer
-from gramps.gen.lib import DNAProviderType, DNATestType
+from gramps.gen.lib import DNAGenomeBuildType, DNAProviderType, DNATestType
 from .flatbasemodel import FlatBaseModel
 
 
@@ -65,11 +65,13 @@ class DNATestModel(FlatBaseModel):
       3  Provider
       4  Kit ID
       5  Test type
-      6  Haplogroup
-      7  Private
-      8  Tags
-      9  Last changed
-     10  Tag color (model-only, not displayed)
+      6  Genome build
+      7  Y haplogroup
+      8  mt haplogroup
+      9  Private
+     10  Tags
+     11  Last changed
+     12  Tag color (model-only, not displayed)
     """
 
     def __init__(
@@ -92,7 +94,9 @@ class DNATestModel(FlatBaseModel):
             self.column_provider,
             self.column_kit_id,
             self.column_test_type,
-            self.column_haplogroup,
+            self.column_genome_build,
+            self.column_y_haplogroup,
+            self.column_mt_haplogroup,
             self.column_private,
             self.column_tags,
             self.column_change,
@@ -105,7 +109,9 @@ class DNATestModel(FlatBaseModel):
             self.column_provider,
             self.column_kit_id,
             self.column_test_type,
-            self.column_haplogroup,
+            self.column_genome_build,
+            self.column_y_haplogroup,
+            self.column_mt_haplogroup,
             self.column_private,
             self.column_tags,
             self.sort_change,
@@ -131,7 +137,7 @@ class DNATestModel(FlatBaseModel):
         """
         Return the color column index.
         """
-        return 10
+        return 12
 
     def on_get_n_columns(self):
         return len(self.fmap) + 1
@@ -164,12 +170,14 @@ class DNATestModel(FlatBaseModel):
     def column_test_type(self, data):
         return DNATestType.get_str(data.test_type)
 
-    def column_haplogroup(self, data):
-        y = data.y_haplogroup
-        mt = data.mt_haplogroup
-        if y and mt:
-            return f"{y} / {mt}"
-        return y or mt
+    def column_genome_build(self, data):
+        return DNAGenomeBuildType.get_str(data.genome_build)
+
+    def column_y_haplogroup(self, data):
+        return data.y_haplogroup
+
+    def column_mt_haplogroup(self, data):
+        return data.mt_haplogroup
 
     def column_private(self, data):
         if data.private:

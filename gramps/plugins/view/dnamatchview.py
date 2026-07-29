@@ -64,21 +64,27 @@ class DNAMatchView(ListView):
     COL_SUBJECT_TEST = 1
     COL_MATCH_TEST = 2
     COL_SHARED_CM = 3
-    COL_LARGEST_SEG = 4
-    COL_SEG_COUNT = 5
-    COL_PREDICTED_REL = 6
-    COL_PRED_PROB = 7
-    COL_SHARED_ANCS = 8
-    COL_PRIV = 9
-    COL_TAGS = 10
-    COL_CHAN = 11
+    COL_SHARED_CM_WEIGHTED = 4
+    COL_LARGEST_SEG = 5
+    COL_LARGEST_SEG_WEIGHTED = 6
+    COL_PERCENT_SHARED = 7
+    COL_SEG_COUNT = 8
+    COL_PREDICTED_REL = 9
+    COL_PRED_PROB = 10
+    COL_SHARED_ANCS = 11
+    COL_PRIV = 12
+    COL_TAGS = 13
+    COL_CHAN = 14
 
     COLUMNS = [
         (_("ID"), TEXT, None),
         (_("Subject test"), TEXT, None),
         (_("Match test"), TEXT, None),
         (_("Shared cM"), TEXT, None),
+        (_("Weighted cM"), TEXT, None),
         (_("Largest segment cM"), TEXT, None),
+        (_("Weighted largest segment cM"), TEXT, None),
+        (_("Percent shared"), TEXT, None),
         (_("Segment count"), TEXT, None),
         (_("Predicted relationship"), TEXT, None),
         (_("Probability"), TEXT, None),
@@ -106,7 +112,10 @@ class DNAMatchView(ListView):
                 COL_SUBJECT_TEST,
                 COL_MATCH_TEST,
                 COL_SHARED_CM,
+                COL_SHARED_CM_WEIGHTED,
                 COL_LARGEST_SEG,
+                COL_LARGEST_SEG_WEIGHTED,
+                COL_PERCENT_SHARED,
                 COL_SEG_COUNT,
                 COL_PREDICTED_REL,
                 COL_PRED_PROB,
@@ -116,7 +125,10 @@ class DNAMatchView(ListView):
                 COL_CHAN,
             ],
         ),
-        ("columns.size", [75, 200, 200, 75, 75, 75, 120, 75, 75, 40, 100, 100]),
+        (
+            "columns.size",
+            [75, 200, 200, 75, 75, 75, 75, 75, 75, 120, 75, 75, 40, 100, 100],
+        ),
     )
 
     ADD_MSG = _("Add a new DNA match")

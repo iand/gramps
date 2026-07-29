@@ -67,10 +67,12 @@ class DNATestView(ListView):
     COL_PROVIDER = 3
     COL_KIT_ID = 4
     COL_TEST_TYPE = 5
-    COL_HAPLOGROUP = 6
-    COL_PRIV = 7
-    COL_TAGS = 8
-    COL_CHAN = 9
+    COL_GENOME_BUILD = 6
+    COL_Y_HAPLOGROUP = 7
+    COL_MT_HAPLOGROUP = 8
+    COL_PRIV = 9
+    COL_TAGS = 10
+    COL_CHAN = 11
 
     COLUMNS = [
         (_("ID"), TEXT, None),
@@ -79,7 +81,9 @@ class DNATestView(ListView):
         (_("Provider"), TEXT, None),
         (_("Kit ID"), TEXT, None),
         (_("Test type"), TEXT, None),
-        (_("Haplogroup"), TEXT, None),
+        (_("Genome build"), TEXT, None),
+        (_("Y haplogroup"), TEXT, None),
+        (_("mt haplogroup"), TEXT, None),
         (_("Private"), ICON, "gramps-lock"),
         (_("Tags"), TEXT, None),
         (_("Last Changed"), TEXT, None),
@@ -88,7 +92,7 @@ class DNATestView(ListView):
     CONFIGSETTINGS = (
         (
             "columns.visible",
-            [COL_PERSON, COL_ACCOUNT, COL_PROVIDER, COL_TEST_TYPE, COL_HAPLOGROUP],
+            [COL_PERSON, COL_ACCOUNT, COL_PROVIDER, COL_TEST_TYPE],
         ),
         (
             "columns.rank",
@@ -99,13 +103,15 @@ class DNATestView(ListView):
                 COL_PROVIDER,
                 COL_KIT_ID,
                 COL_TEST_TYPE,
-                COL_HAPLOGROUP,
+                COL_GENOME_BUILD,
+                COL_Y_HAPLOGROUP,
+                COL_MT_HAPLOGROUP,
                 COL_PRIV,
                 COL_TAGS,
                 COL_CHAN,
             ],
         ),
-        ("columns.size", [75, 200, 150, 100, 100, 100, 100, 40, 100, 100]),
+        ("columns.size", [75, 200, 150, 100, 100, 100, 100, 100, 100, 40, 100, 100]),
     )
 
     ADD_MSG = _("Add a new DNA test")

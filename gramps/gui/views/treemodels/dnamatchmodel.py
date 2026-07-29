@@ -64,15 +64,18 @@ class DNAMatchModel(FlatBaseModel):
       1  Subject test (person name or account name + provider)
       2  Match test (person name or account name + provider)
       3  Shared cM
-      4  Largest segment cM
-      5  Segment count
-      6  Predicted relationship
-      7  Predicted relationship probability
-      8  Shared ancestors count
-      9  Private
-     10  Tags
-     11  Last changed
-     12  Tag color (model-only, not displayed)
+      4  Weighted shared cM
+      5  Largest segment cM
+      6  Weighted largest segment cM
+      7  Percent shared
+      8  Segment count
+      9  Predicted relationship
+     10  Predicted relationship probability
+     11  Shared ancestors count
+     12  Private
+     13  Tags
+     14  Last changed
+     15  Tag color (model-only, not displayed)
     """
 
     def __init__(
@@ -93,7 +96,10 @@ class DNAMatchModel(FlatBaseModel):
             self.column_subject_test,
             self.column_match_test,
             self.column_shared_cm,
+            self.column_shared_cm_weighted,
             self.column_largest_seg,
+            self.column_largest_seg_weighted,
+            self.column_percent_shared,
             self.column_seg_count,
             self.column_predicted_rel,
             self.column_pred_prob,
@@ -108,7 +114,10 @@ class DNAMatchModel(FlatBaseModel):
             self.column_subject_test,
             self.column_match_test,
             self.sort_shared_cm,
+            self.sort_shared_cm_weighted,
             self.sort_largest_seg,
+            self.sort_largest_seg_weighted,
+            self.sort_percent_shared,
             self.sort_seg_count,
             self.column_predicted_rel,
             self.sort_pred_prob,
@@ -138,7 +147,7 @@ class DNAMatchModel(FlatBaseModel):
         """
         Return the color column index.
         """
-        return 12
+        return 15
 
     def on_get_n_columns(self):
         return len(self.fmap) + 1
@@ -181,11 +190,32 @@ class DNAMatchModel(FlatBaseModel):
     def sort_shared_cm(self, data):
         return "%015.4f" % (data.shared_cm or 0.0)
 
+    def column_shared_cm_weighted(self, data):
+        return self._fmt_float(data.shared_cm_weighted)
+
+    def sort_shared_cm_weighted(self, data):
+        return "%015.4f" % (data.shared_cm_weighted or 0.0)
+
     def column_largest_seg(self, data):
         return self._fmt_float(data.largest_segment_cm)
 
     def sort_largest_seg(self, data):
         return "%015.4f" % (data.largest_segment_cm or 0.0)
+
+    def column_largest_seg_weighted(self, data):
+        return self._fmt_float(data.largest_segment_cm_weighted)
+
+    def sort_largest_seg_weighted(self, data):
+        return "%015.4f" % (data.largest_segment_cm_weighted or 0.0)
+
+    def column_percent_shared(self, data):
+        val = data.percent_shared
+        if not val:
+            return ""
+        return "%g%%" % val
+
+    def sort_percent_shared(self, data):
+        return "%015.4f" % (data.percent_shared or 0.0)
 
     def column_seg_count(self, data):
         val = data.segment_count
