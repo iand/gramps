@@ -640,6 +640,8 @@ def get_citation_referents(citation_handle, db):
         "Source",
         "Media",
         "Repository",
+        "DNATest",
+        "DNAMatch",
     )
 
     return get_referents(citation_handle, db, _primaries)
@@ -730,7 +732,16 @@ def get_media_referents(media_handle, db):
     This function finds all primary objects that refer
     to a given media handle in a given database.
     """
-    _primaries = ("Person", "Family", "Event", "Place", "Source", "Citation")
+    _primaries = (
+        "Person",
+        "Family",
+        "Event",
+        "Place",
+        "Source",
+        "Citation",
+        "DNATest",
+        "DNAMatch",
+    )
 
     return get_referents(media_handle, db, _primaries)
 
@@ -751,6 +762,8 @@ def get_note_referents(note_handle, db):
         "Citation",
         "Media",
         "Repository",
+        "DNATest",
+        "DNAMatch",
     )
 
     return get_referents(note_handle, db, _primaries)
