@@ -49,6 +49,7 @@ from gramps.gen.utils.db import dnatest_short_label
 from .flatbasemodel import FlatBaseModel
 
 _ = glocale.translation.sgettext
+ngettext = glocale.translation.ngettext  # else "nearby" comments are ignored
 
 
 # -------------------------------------------------------------------------
@@ -249,17 +250,41 @@ class DNAMatchModel(FlatBaseModel):
                 best = rel
         return best if best is not None else lst[0]
 
+    def _prediction_label(self, rel):
+        """
+        Return the text describing a prediction.
+
+        Providers that report only a generation count, such as GEDmatch, leave
+        the description empty; the generations stand in for it.
+        """
+        if rel.description:
+            return rel.description
+        subject_gens = rel.subject_mrca_gens
+        match_gens = rel.match_mrca_gens
+        if subject_gens and match_gens and subject_gens != match_gens:
+            return _("%(subject)d / %(match)d generations") % {
+                "subject": subject_gens,
+                "match": match_gens,
+            }
+        gens = subject_gens or match_gens
+        if gens:
+            return ngettext("%d generation", "%d generations", gens) % gens
+        return ""
+
     def column_predicted_rel(self, data):
         rel = self._primary_prediction(data)
         if rel is None:
             return ""
-        text = rel.description or _("(unnamed)")
+        parts = []
+        label = self._prediction_label(rel)
+        if label:
+            parts.append(label)
         if rel.probability:
-            text += " (%g%%)" % rel.probability
+            parts.append("(%g%%)" % rel.probability)
         count = len(data.predicted_relationship_list) - 1
         if count:
-            text += " (+%d)" % count
-        return text
+            parts.append("(+%d)" % count)
+        return " ".join(parts)
 
     def column_shared_ancestors(self, data):
         lst = data.shared_ancestor_list
