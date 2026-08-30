@@ -1901,6 +1901,7 @@ Company. He enlisted in the army at Sparks 7 December 1917 and served as a Corpo
     <dnamatch handle="_dna1m0001ksiberic011" change="1552262400" id="M00001" priv="0">
       <subject_test hlink="_dna1t0001ksmith6600"/>
       <match_test hlink="_dna1t0002esmth196301"/>
+      <provider>AncestryDNA</provider>
       <shared_cm val="2547.3"/>
       <shared_cm_weighted val="2458.1"/>
       <percent_shared val="35.9"/>
@@ -1926,6 +1927,7 @@ Company. He enlisted in the army at Sparks 7 December 1917 and served as a Corpo
     <dnamatch handle="_dna1m0002kvsedwin012" change="1601251200" id="M00002" priv="0">
       <subject_test hlink="_dna1t0001ksmith6600"/>
       <match_test hlink="_dna1t0003edmth196101"/>
+      <provider>AncestryDNA</provider>
       <shared_cm val="212.4"/>
       <shared_cm_weighted val="205.0"/>
       <percent_shared val="3.0"/>
@@ -1954,6 +1956,7 @@ Company. He enlisted in the army at Sparks 7 December 1917 and served as a Corpo
     <dnamatch handle="_dna1m0003kvsmrjrie013" change="1614038400" id="M00003" priv="0">
       <subject_test hlink="_dna1t0001ksmith6600"/>
       <match_test hlink="_dna1t0005msmth196001"/>
+      <provider>GEDmatch</provider>
       <shared_cm val="176.8"/>
       <shared_cm_weighted val="170.6"/>
       <percent_shared val="2.49"/>
@@ -1983,6 +1986,7 @@ Company. He enlisted in the army at Sparks 7 December 1917 and served as a Corpo
     <dnamatch handle="_dna1m0004kvsmarie014" change="1601510400" id="M00004" priv="0">
       <subject_test hlink="_dna1t0001ksmith6600"/>
       <match_test hlink="_dna1t0006msmth194701"/>
+      <provider>GEDmatch</provider>
       <shared_cm val="195.6"/>
       <shared_cm_weighted val="188.8"/>
       <percent_shared val="2.75"/>
@@ -2007,6 +2011,7 @@ Company. He enlisted in the army at Sparks 7 December 1917 and served as a Corpo
     <dnamatch handle="_dna1m0005kvsjcbrwn015" change="1715086400" id="M00005" priv="0">
       <subject_test hlink="_dna1t0001ksmith6600"/>
       <match_test hlink="_dna1t0007jcbrown5200"/>
+      <provider>GEDmatch</provider>
       <shared_cm val="85.2"/>
       <shared_cm_weighted val="82.2"/>
       <percent_shared val="1.2"/>
@@ -2024,6 +2029,7 @@ Company. He enlisted in the army at Sparks 7 December 1917 and served as a Corpo
     <dnamatch handle="_dna1m0006evsmarie016" change="1601596800" id="M00006" priv="0">
       <subject_test hlink="_dna1t0003edmth196101"/>
       <match_test hlink="_dna1t0006msmth194701"/>
+      <provider>GEDmatch</provider>
       <shared_cm val="185.4"/>
       <shared_cm_weighted val="178.9"/>
       <percent_shared val="2.61"/>
@@ -2051,6 +2057,7 @@ Company. He enlisted in the army at Sparks 7 December 1917 and served as a Corpo
     <dnamatch handle="_dna1m0007evsandrsn017" change="1715172800" id="M00007" priv="0">
       <subject_test hlink="_dna1t0003edmth196101"/>
       <match_test hlink="_dna1t0008anderson0h0"/>
+      <provider>AncestryDNA</provider>
       <shared_cm val="67.3"/>
       <shared_cm_weighted val="64.9"/>
       <percent_shared val="0.95"/>

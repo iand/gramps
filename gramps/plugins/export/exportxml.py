@@ -58,7 +58,7 @@ from gramps.gen.const import GRAMPS_LOCALE as glocale
 
 _ = glocale.translation.gettext
 from gramps.gen.const import URL_NS
-from gramps.gen.lib import Date, DNAGenomeBuildType, Person
+from gramps.gen.lib import Date, DNAGenomeBuildType, DNAProviderType, Person
 from gramps.gen.updatecallback import UpdateCallback
 from gramps.gen.db.exceptions import DbWriteFailure
 from gramps.version import VERSION
@@ -1477,6 +1477,11 @@ class GrampsXmlWriter(UpdateCallback):
             self.g.write(
                 '%s<match_test hlink="_%s"/>\n'
                 % (sp2, dnamatch.get_match_test_handle())
+            )
+        if dnamatch.get_provider() != DNAProviderType.UNKNOWN:
+            self.g.write(
+                "%s<provider>%s</provider>\n"
+                % (sp2, self.fix(dnamatch.get_provider().xml_str()))
             )
         if dnamatch.get_shared_cm():
             self.g.write(

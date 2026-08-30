@@ -24,6 +24,8 @@ _ = glocale.translation.gettext
 from gi.repository import Gtk
 
 from ... import widgets
+from gramps.gen.lib.dnamatch import DNAMatch
+from gramps.gen.lib.dnaprovidertype import DNAProviderType
 from . import SidebarFilter
 from gramps.gen.filters import GenericFilterFactory
 from gramps.gen.filters.rules.dnamatch import (
@@ -33,6 +35,7 @@ from gramps.gen.filters.rules.dnamatch import (
     HasMatchAccountName,
     HasSubjectPersonName,
     HasMatchPersonName,
+    HasProvider,
     HasSharedCm,
 )
 
@@ -55,6 +58,18 @@ class DNAMatchSidebarFilter(SidebarFilter):
         self.filter_min_cm = widgets.BasicEntry()
         self.filter_max_cm = widgets.BasicEntry()
 
+        self._dnamatch = DNAMatch()
+        self._dnamatch.set_provider((DNAProviderType.CUSTOM, ""))
+
+        self.provider_combo = Gtk.ComboBox(has_entry=True)
+        self.provider_menu = widgets.MonitoredDataType(
+            self.provider_combo,
+            self._dnamatch.set_provider,
+            self._dnamatch.get_provider,
+            False,
+            [],
+        )
+
         self.filter_regex = Gtk.CheckButton(label=_("Use regular expressions"))
         self.sensitive_regex = Gtk.CheckButton(label=_("Case sensitive"))
 
@@ -70,11 +85,14 @@ class DNAMatchSidebarFilter(SidebarFilter):
         self.tag.pack_start(cell, True)
         self.tag.add_attribute(cell, "text", 0)
 
+        self.provider_combo.get_child().set_width_chars(5)
+
         self.add_text_entry(_("ID"), self.filter_id)
         self.add_text_entry(_("Subject person"), self.filter_subject_person)
         self.add_text_entry(_("Subject account name"), self.filter_subject_account)
         self.add_text_entry(_("Match person"), self.filter_match_person)
         self.add_text_entry(_("Match account name"), self.filter_match_account)
+        self.add_entry(_("Matching service"), self.provider_combo)
         self.add_text_entry(_("Shared cM min"), self.filter_min_cm)
         self.add_text_entry(_("Shared cM max"), self.filter_max_cm)
         self.add_entry(_("Tag"), self.tag)
@@ -87,6 +105,7 @@ class DNAMatchSidebarFilter(SidebarFilter):
         self.filter_subject_account.set_text("")
         self.filter_match_person.set_text("")
         self.filter_match_account.set_text("")
+        self.provider_combo.get_child().set_text("")
         self.filter_min_cm.set_text("")
         self.filter_max_cm.set_text("")
         self.tag.set_active(0)
@@ -97,6 +116,7 @@ class DNAMatchSidebarFilter(SidebarFilter):
         subject_account = str(self.filter_subject_account.get_text()).strip()
         match_person = str(self.filter_match_person.get_text()).strip()
         match_account = str(self.filter_match_account.get_text()).strip()
+        provider = self._dnamatch.get_provider().xml_str()
         min_cm = str(self.filter_min_cm.get_text()).strip()
         max_cm = str(self.filter_max_cm.get_text()).strip()
         regex = self.filter_regex.get_active()
@@ -109,6 +129,7 @@ class DNAMatchSidebarFilter(SidebarFilter):
             or subject_account
             or match_person
             or match_account
+            or provider
             or min_cm
             or max_cm
             or regex
@@ -143,6 +164,10 @@ class DNAMatchSidebarFilter(SidebarFilter):
 
         if match_person:
             rule = HasMatchPersonName([match_person], use_regex=regex, use_case=usecase)
+            generic_filter.add_rule(rule)
+
+        if provider:
+            rule = HasProvider([provider])
             generic_filter.add_rule(rule)
 
         if min_cm or max_cm:

@@ -822,6 +822,7 @@
     <optional><element name="match_test">
         <attribute name="hlink"><data type="IDREF"/></attribute>
     </element></optional>
+    <optional><element name="provider"><text/></element></optional>
     <optional><element name="shared_cm">
         <attribute name="val"><text/></attribute>
     </element></optional>

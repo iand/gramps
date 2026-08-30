@@ -45,6 +45,7 @@ from .displaytabs.predictedrelationshipembedlist import PredictedRelationshipEmb
 from .displaytabs.sharedancestorembedlist import SharedAncestorEmbedList
 from .displaytabs.dnasegmentembedlist import DNASegmentEmbedList
 from ..widgets import (
+    MonitoredDataType,
     MonitoredEntry,
     PrivacyButton,
     MonitoredTagList,
@@ -150,6 +151,13 @@ class EditDNAMatch(EditPrimary):
             self.obj.get_match_test_handle,
             self.match_add_del_btn,
             self.match_share_btn,
+        )
+
+        self.provider_field = MonitoredDataType(
+            self.top.get_object("provider"),
+            self.obj.set_provider,
+            self.obj.get_provider,
+            self.db.readonly,
         )
 
         self.shared_cm_field = MonitoredEntry(

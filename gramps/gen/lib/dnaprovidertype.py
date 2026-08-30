@@ -39,7 +39,11 @@ _ = glocale.translation.gettext
 # -------------------------------------------------------------------------
 class DNAProviderType(GrampsType):
     """
-    Class encapsulating the DNA testing provider.
+    Class encapsulating a DNA testing or matching service.
+
+    A DNATest uses this for the service that produced the kit. A DNAMatch
+    uses it for the service that reported the match, which may be a
+    comparison site such as GEDmatch that runs no test of its own.
     """
 
     UNKNOWN = -1
@@ -48,7 +52,7 @@ class DNAProviderType(GrampsType):
     TWENTY_THREE_AND_ME = 2
     MYHERITAGE = 3
     FTDNA = 4
-    # value 5 was GEDmatch, removed as it is not a test provider
+    GEDMATCH = 5
     LIVINGDNA = 6
 
     _CUSTOM = CUSTOM
@@ -61,6 +65,7 @@ class DNAProviderType(GrampsType):
         (TWENTY_THREE_AND_ME, _("23andMe"), "23andMe"),
         (MYHERITAGE, _("MyHeritage"), "MyHeritage"),
         (FTDNA, _("FTDNA"), "FTDNA"),
+        (GEDMATCH, _("GEDmatch"), "GEDmatch"),
         (LIVINGDNA, _("LivingDNA"), "LivingDNA"),
     ]
 

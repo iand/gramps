@@ -106,6 +106,14 @@ class MergeDNAMatch(ManagedWindow):
         )
         self._init_field("match1", "match2", "match_btn1", "match_btn2", match1, match2)
         self._init_field(
+            "provider1",
+            "provider2",
+            "provider_btn1",
+            "provider_btn2",
+            str(self.dm1.get_provider()),
+            str(self.dm2.get_provider()),
+        )
+        self._init_field(
             "shared_cm1",
             "shared_cm2",
             "shared_cm_btn1",
@@ -174,6 +182,7 @@ class MergeDNAMatch(ManagedWindow):
             for btn in (
                 "subject_btn1",
                 "match_btn1",
+                "provider_btn1",
                 "shared_cm_btn1",
                 "shared_cm_weighted_btn1",
                 "percent_shared_btn1",
@@ -187,6 +196,7 @@ class MergeDNAMatch(ManagedWindow):
             for btn in (
                 "subject_btn2",
                 "match_btn2",
+                "provider_btn2",
                 "shared_cm_btn2",
                 "shared_cm_weighted_btn2",
                 "percent_shared_btn2",
@@ -213,6 +223,8 @@ class MergeDNAMatch(ManagedWindow):
             phoenix.set_subject_test_handle(titanic.get_subject_test_handle())
         if self.get_widget("match_btn1").get_active() ^ use_handle1:
             phoenix.set_match_test_handle(titanic.get_match_test_handle())
+        if self.get_widget("provider_btn1").get_active() ^ use_handle1:
+            phoenix.set_provider(titanic.get_provider())
         if self.get_widget("shared_cm_btn1").get_active() ^ use_handle1:
             phoenix.set_shared_cm(titanic.get_shared_cm())
         if self.get_widget("shared_cm_weighted_btn1").get_active() ^ use_handle1:

@@ -24,7 +24,12 @@ import tempfile
 import unittest
 
 from gramps.gen.db.utils import import_as_dict
-from gramps.gen.lib import DNASegment, PredictedRelationship, SharedAncestor
+from gramps.gen.lib import (
+    DNAProviderType,
+    DNASegment,
+    PredictedRelationship,
+    SharedAncestor,
+)
 from gramps.gen.user import User
 
 # Minimal Gramps XML 1.8.0 document with a DNATest.
@@ -99,6 +104,7 @@ _DNAMATCH_XML = """\
     <dnamatch handle="_dm0001" change="0" id="M00001">
       <subject_test hlink="_dt0001"/>
       <match_test hlink="_dt0002"/>
+      <provider>GEDmatch</provider>
       <shared_cm val="45.3"/>
       <shared_cm_weighted val="44.1"/>
       <percent_shared val="0.67"/>
@@ -220,6 +226,9 @@ class TestDNAMatchImport(unittest.TestCase):
         dm = self._dm()
         self.assertIsNotNone(dm.get_subject_test_handle())
         self.assertIsNotNone(dm.get_match_test_handle())
+
+    def test_provider(self):
+        self.assertEqual(self._dm().get_provider().xml_str(), "GEDmatch")
 
     def test_statistics(self):
         dm = self._dm()
@@ -399,6 +408,9 @@ class TestDNAAttributeRefs(unittest.TestCase):
         self.assertEqual(attr.get_value(), "13")
         self.assertEqual(len(attr.get_citation_list()), 1)
         self.assertEqual(len(attr.get_note_list()), 1)
+
+    def test_dnamatch_without_provider(self):
+        self.assertEqual(self._dnamatch().get_provider(), DNAProviderType.UNKNOWN)
 
     def test_dnamatch_attribute_citation(self):
         attrs = self._dnamatch().get_attribute_list()

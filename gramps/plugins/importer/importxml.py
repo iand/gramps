@@ -3505,6 +3505,8 @@ class GrampsParser(UpdateCallback):
     def stop_provider(self, tag):
         if self.dnatest:
             self.dnatest.get_provider().set_from_xml_str(tag)
+        elif self.dnamatch:
+            self.dnamatch.get_provider().set_from_xml_str(tag)
 
     def stop_kit_id(self, tag):
         if self.dnatest:

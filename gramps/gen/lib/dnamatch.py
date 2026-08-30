@@ -36,6 +36,7 @@ import logging
 from ..const import GRAMPS_LOCALE as glocale
 from .attrbase import DNAAttributeBase
 from .citationbase import CitationBase
+from .dnaprovidertype import DNAProviderType
 from .dnasegment import DNASegment
 from .mediabase import MediaBase
 from .notebase import NoteBase
@@ -67,6 +68,10 @@ class DNAMatch(
     subject_test_handle is the kit whose match list this came from.
     match_test_handle is the other kit; it always has a DNATest record.
 
+    provider is the service that reported the match. It is not always the
+    service that produced either kit: a match found on a comparison site
+    such as GEDmatch compares kits tested elsewhere.
+
     The match does not store a confirmed relationship. Once both
     DNATest records have person_handle set the relationship is computable
     from the tree. predicted_relationship_list holds the possible
@@ -89,6 +94,7 @@ class DNAMatch(
         if source:
             self.__subject_test_handle = source.__subject_test_handle
             self.__match_test_handle = source.__match_test_handle
+            self.__provider = DNAProviderType(source.__provider)
             self.__shared_cm = source.__shared_cm
             self.__shared_cm_weighted = source.__shared_cm_weighted
             self.__percent_shared = source.__percent_shared
@@ -105,6 +111,7 @@ class DNAMatch(
         else:
             self.__subject_test_handle = None
             self.__match_test_handle = None
+            self.__provider = DNAProviderType()
             self.__shared_cm = 0.0
             self.__shared_cm_weighted = 0.0
             self.__percent_shared = 0.0
@@ -128,6 +135,7 @@ class DNAMatch(
             self.gramps_id,
             self.__subject_test_handle,
             self.__match_test_handle,
+            self.__provider.serialize(),
             self.__shared_cm,
             self.__shared_cm_weighted,
             self.__percent_shared,
@@ -153,6 +161,7 @@ class DNAMatch(
         attr_dict = super().get_object_state()
         attr_dict["subject_test_handle"] = self.__subject_test_handle
         attr_dict["match_test_handle"] = self.__match_test_handle
+        attr_dict["provider"] = self.__provider
         attr_dict["shared_cm"] = self.__shared_cm
         attr_dict["shared_cm_weighted"] = self.__shared_cm_weighted
         attr_dict["percent_shared"] = self.__percent_shared
@@ -170,6 +179,7 @@ class DNAMatch(
         """
         self.__subject_test_handle = attr_dict.pop("subject_test_handle")
         self.__match_test_handle = attr_dict.pop("match_test_handle")
+        self.__provider = attr_dict.pop("provider", DNAProviderType())
         self.__shared_cm = attr_dict.pop("shared_cm")
         self.__shared_cm_weighted = attr_dict.pop("shared_cm_weighted", 0.0)
         self.__percent_shared = attr_dict.pop("percent_shared")
@@ -218,6 +228,7 @@ class DNAMatch(
                     "maxLength": 50,
                     "title": _("Match kit"),
                 },
+                "provider": DNAProviderType.get_schema(),
                 "shared_cm": {"type": "number", "title": _("Shared cM")},
                 "shared_cm_weighted": {
                     "type": "number",
@@ -297,6 +308,7 @@ class DNAMatch(
             self.gramps_id,
             self.__subject_test_handle,
             self.__match_test_handle,
+            provider,
             self.__shared_cm,
             self.__shared_cm_weighted,
             self.__percent_shared,
@@ -315,6 +327,8 @@ class DNAMatch(
             self.private,
         ) = data
 
+        self.__provider = DNAProviderType()
+        self.__provider.unserialize(provider)
         self.__predicted_relationship_list = [
             PredictedRelationship().unserialize(pr)
             for pr in predicted_relationship_list
@@ -377,7 +391,7 @@ class DNAMatch(
         """
         Return the list of all textual attributes of the object.
         """
-        return [self.gramps_id]
+        return [str(self.__provider), self.gramps_id]
 
     def get_text_data_child_list(self):
         """
@@ -513,6 +527,16 @@ class DNAMatch(
         return self.__match_test_handle
 
     match_test_handle = property(get_match_test_handle, set_match_test_handle)
+
+    def set_provider(self, provider):
+        """Set the service that reported the match."""
+        self.__provider.set(provider)
+
+    def get_provider(self):
+        """Return the service that reported the match."""
+        return self.__provider
+
+    provider = property(get_provider, set_provider)
 
     def set_shared_cm(self, cm):
         """Set the unweighted total shared centimorgans."""

@@ -27,6 +27,7 @@ from ._hassubjectaccountname import HasSubjectAccountName
 from ._hasmatchaccountname import HasMatchAccountName
 from ._hassubjectpersonname import HasSubjectPersonName
 from ._hasmatchpersonname import HasMatchPersonName
+from ._hasprovider import HasProvider
 from ._hassharedcm import HasSharedCm
 
 editor_rule_list: list[type] = []

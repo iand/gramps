@@ -63,22 +63,24 @@ class DNAMatchView(ListView):
     COL_ID = 0
     COL_SUBJECT_TEST = 1
     COL_MATCH_TEST = 2
-    COL_SHARED_CM = 3
-    COL_SHARED_CM_WEIGHTED = 4
-    COL_LARGEST_SEG = 5
-    COL_LARGEST_SEG_WEIGHTED = 6
-    COL_PERCENT_SHARED = 7
-    COL_SEG_COUNT = 8
-    COL_PREDICTED_REL = 9
-    COL_SHARED_ANCS = 10
-    COL_PRIV = 11
-    COL_TAGS = 12
-    COL_CHAN = 13
+    COL_PROVIDER = 3
+    COL_SHARED_CM = 4
+    COL_SHARED_CM_WEIGHTED = 5
+    COL_LARGEST_SEG = 6
+    COL_LARGEST_SEG_WEIGHTED = 7
+    COL_PERCENT_SHARED = 8
+    COL_SEG_COUNT = 9
+    COL_PREDICTED_REL = 10
+    COL_SHARED_ANCS = 11
+    COL_PRIV = 12
+    COL_TAGS = 13
+    COL_CHAN = 14
 
     COLUMNS = [
         (_("ID"), TEXT, None),
         (_("Subject test"), TEXT, None),
         (_("Match test"), TEXT, None),
+        (_("Matching service"), TEXT, None),
         (_("Shared cM"), TEXT, None),
         (_("Weighted cM"), TEXT, None),
         (_("Largest segment cM"), TEXT, None),
@@ -98,6 +100,7 @@ class DNAMatchView(ListView):
             [
                 COL_SUBJECT_TEST,
                 COL_MATCH_TEST,
+                COL_PROVIDER,
                 COL_SHARED_CM,
                 COL_LARGEST_SEG,
                 COL_PREDICTED_REL,
@@ -109,6 +112,7 @@ class DNAMatchView(ListView):
                 COL_ID,
                 COL_SUBJECT_TEST,
                 COL_MATCH_TEST,
+                COL_PROVIDER,
                 COL_SHARED_CM,
                 COL_SHARED_CM_WEIGHTED,
                 COL_LARGEST_SEG,
@@ -124,7 +128,7 @@ class DNAMatchView(ListView):
         ),
         (
             "columns.size",
-            [75, 200, 200, 75, 75, 75, 75, 75, 75, 160, 75, 40, 100, 100],
+            [75, 200, 200, 100, 75, 75, 75, 75, 75, 75, 160, 75, 40, 100, 100],
         ),
     )
 

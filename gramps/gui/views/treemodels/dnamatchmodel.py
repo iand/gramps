@@ -44,6 +44,7 @@ from gi.repository import Gtk
 # -------------------------------------------------------------------------
 from gramps.gen.datehandler import format_time
 from gramps.gen.const import GRAMPS_LOCALE as glocale
+from gramps.gen.lib import DNAProviderType
 from gramps.gen.utils.db import dnatest_short_label
 from .flatbasemodel import FlatBaseModel
 
@@ -63,18 +64,19 @@ class DNAMatchModel(FlatBaseModel):
       0  Gramps ID
       1  Subject test (person name or account name + provider)
       2  Match test (person name or account name + provider)
-      3  Shared cM
-      4  Weighted shared cM
-      5  Largest segment cM
-      6  Weighted largest segment cM
-      7  Percent shared
-      8  Segment count
-      9  Predicted relationship, with probability and alternative count
-     10  Shared ancestors count
-     11  Private
-     12  Tags
-     13  Last changed
-     14  Tag color (model-only, not displayed)
+      3  Matching service
+      4  Shared cM
+      5  Weighted shared cM
+      6  Largest segment cM
+      7  Weighted largest segment cM
+      8  Percent shared
+      9  Segment count
+     10  Predicted relationship, with probability and alternative count
+     11  Shared ancestors count
+     12  Private
+     13  Tags
+     14  Last changed
+     15  Tag color (model-only, not displayed)
     """
 
     def __init__(
@@ -94,6 +96,7 @@ class DNAMatchModel(FlatBaseModel):
             self.column_id,
             self.column_subject_test,
             self.column_match_test,
+            self.column_provider,
             self.column_shared_cm,
             self.column_shared_cm_weighted,
             self.column_largest_seg,
@@ -111,6 +114,7 @@ class DNAMatchModel(FlatBaseModel):
             self.column_id,
             self.column_subject_test,
             self.column_match_test,
+            self.column_provider,
             self.sort_shared_cm,
             self.sort_shared_cm_weighted,
             self.sort_largest_seg,
@@ -144,7 +148,7 @@ class DNAMatchModel(FlatBaseModel):
         """
         Return the color column index.
         """
-        return 14
+        return 15
 
     def on_get_n_columns(self):
         return len(self.fmap) + 1
@@ -175,6 +179,11 @@ class DNAMatchModel(FlatBaseModel):
             )
             self.set_cached_value(handle, "MATCH_TEST", value)
         return value
+
+    def column_provider(self, data):
+        if data.provider.value == DNAProviderType.UNKNOWN:
+            return ""
+        return DNAProviderType.get_str(data.provider)
 
     def _fmt_float(self, val):
         if not val:

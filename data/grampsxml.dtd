@@ -412,7 +412,7 @@ DNA MATCHES
 
 <!ELEMENT dnamatches (dnamatch)*>
 
-<!ELEMENT dnamatch (subject_test?, match_test?, shared_cm?, shared_cm_weighted?,
+<!ELEMENT dnamatch (subject_test?, match_test?, provider?, shared_cm?, shared_cm_weighted?,
                     percent_shared?, segment_count?, largest_segment_cm?,
                     largest_segment_cm_weighted?, predicted_relationship*,
                     shared_ancestor*, dna_segment*,
