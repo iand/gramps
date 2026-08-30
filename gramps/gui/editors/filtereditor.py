@@ -692,7 +692,7 @@ class EditRule(ManagedWindow):
                         [""] + chromosomes,
                         [_("Any")] + chromosomes,
                     )
-                elif v == _("Phase:"):
+                elif v == _("Origin:"):
                     t = MyList(
                         ["", "0", "1", "2", "3"],
                         [
