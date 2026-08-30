@@ -45,11 +45,53 @@ _IBD_STATE_LABELS = [
     _("FIR"),
 ]
 
+_CHROMOSOME_RANK = {"X": 23, "Y": 24, "MT": 25}
+
+
+def _chromosome_sort_key(chromosome):
+    """Return a key ordering the numbered chromosomes first, then X, Y and MT."""
+    text = (chromosome or "").strip().upper()
+    if text.isdigit():
+        return "%03d" % int(text)
+    if text in _CHROMOSOME_RANK:
+        return "%03d" % _CHROMOSOME_RANK[text]
+    return "999%s" % text
+
 
 class DNASegmentModel(Gtk.ListStore):
+    """
+    List store backing the segment tab of the DNA match editor.
+
+    The displayed columns hold formatted text. Each numeric field also has a
+    sort column holding a padded key, so the tree view orders the rows by
+    value rather than by the text form.
+    """
+
+    COL_SORT_CHROMOSOME = 8
+    COL_SORT_START = 9
+    COL_SORT_END = 10
+    COL_SORT_SHARED_CM = 11
+    COL_SORT_SNP_COUNT = 12
+
     def __init__(self, segment_list, db):
-        # columns: chromosome, start_bp, end_bp, shared_cm, snp_count, origin, ibd_state, object
-        Gtk.ListStore.__init__(self, str, str, str, str, str, str, str, object)
+        # columns: chromosome, start_bp, end_bp, shared_cm, snp_count, origin,
+        # ibd_state, object, then the sort keys for the numeric columns
+        Gtk.ListStore.__init__(
+            self,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            str,
+            object,
+            str,
+            str,
+            str,
+            str,
+            str,
+        )
         self.db = db
         for seg in segment_list:
             origin = seg.get_origin()
@@ -78,6 +120,11 @@ class DNASegmentModel(Gtk.ListStore):
                     origin_label,
                     ibd_label,
                     seg,
+                    _chromosome_sort_key(seg.get_chromosome()),
+                    "%012d" % (seg.get_start_bp() or 0),
+                    "%012d" % (seg.get_end_bp() or 0),
+                    "%015.4f" % (seg.get_shared_cm() or 0.0),
+                    "%010d" % (seg.get_snp_count() or 0),
                 ]
             )
 
@@ -99,12 +146,14 @@ class DNASegmentEmbedList(EmbeddedList):
         "down": _("Move the selected segment downwards"),
     }
 
+    # index = column in model, value = (name, sortcol in model, width,
+    # markup/text, weight_col, icon)
     _column_names = [
-        (_("Chr"), 0, 50, TEXT_COL, -1, None),
-        (_("Start"), 1, 100, TEXT_COL, -1, None),
-        (_("End"), 2, 100, TEXT_COL, -1, None),
-        (_("cM"), 3, 70, TEXT_COL, -1, None),
-        (_("SNPs"), 4, 70, TEXT_COL, -1, None),
+        (_("Chr"), DNASegmentModel.COL_SORT_CHROMOSOME, 50, TEXT_COL, -1, None),
+        (_("Start"), DNASegmentModel.COL_SORT_START, 100, TEXT_COL, -1, None),
+        (_("End"), DNASegmentModel.COL_SORT_END, 100, TEXT_COL, -1, None),
+        (_("cM"), DNASegmentModel.COL_SORT_SHARED_CM, 70, TEXT_COL, -1, None),
+        (_("SNPs"), DNASegmentModel.COL_SORT_SNP_COUNT, 70, TEXT_COL, -1, None),
         (_("Origin"), 5, 90, TEXT_COL, -1, None),
         (_("IBD"), 6, 70, TEXT_COL, -1, None),
     ]
