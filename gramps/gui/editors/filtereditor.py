@@ -127,6 +127,7 @@ _name2typeclass = {
     _("DNA test attribute:"): DNAAttributeType,
     _("DNA match attribute:"): DNAAttributeType,
     _("Provider:"): DNAProviderType,
+    _("Matching service:"): DNAProviderType,
     _("Test type:"): DNATestType,
 }
 

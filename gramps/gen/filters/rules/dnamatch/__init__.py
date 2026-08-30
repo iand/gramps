@@ -64,6 +64,7 @@ editor_rule_list: list[type] = [
     HasReferenceCountOf,
     HasAttribute,
     MatchesFilter,
+    HasProvider,
     HasSharedCm,
     HasSegment,
     HasMatchPerson,
