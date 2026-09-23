@@ -427,5 +427,52 @@ class TestDNAAttributeRefs(unittest.TestCase):
         self.assertIn(("Note", attr.get_note_list()[0]), refs)
 
 
+# DNAMatch whose two DNATests are referenced but not defined, as in a partial
+# patch file.
+_DNAMATCH_MISSING_TESTS_XML = """\
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE database PUBLIC "-//Gramps//DTD Gramps XML 1.8.0//EN"
+"http://gramps-project.org/xml/1.8.0/grampsxml.dtd">
+<database xmlns="http://gramps-project.org/xml/1.8.0/">
+  <header>
+    <created date="2026-01-01" version="6.1.0"/>
+    <researcher/>
+  </header>
+  <dnamatches>
+    <dnamatch handle="_dm0001" change="0" id="M00001">
+      <subject_test hlink="_dt0001"/>
+      <match_test hlink="_dt0002"/>
+      <provider>MyHeritage</provider>
+      <shared_cm val="177.8"/>
+    </dnamatch>
+  </dnamatches>
+</database>
+"""
+
+
+class TestDNAMatchMissingTests(unittest.TestCase):
+    """Import a DNAMatch whose DNATests are absent and verify placeholders."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.db = _import_xml_string(_DNAMATCH_MISSING_TESTS_XML)
+
+    def test_import_succeeded(self):
+        self.assertIsNotNone(self.db)
+
+    def test_placeholder_dnatests(self):
+        self.assertEqual(self.db.get_number_of_dnatests(), 2)
+        for handle in self.db.get_dnatest_handles():
+            dt = self.db.get_dnatest_from_handle(handle)
+            self.assertEqual(dt.get_account_name(), "Unknown")
+            self.assertEqual(len(dt.get_note_list()), 1)
+
+    def test_match_links_placeholders(self):
+        dm = self.db.get_dnamatch_from_handle(list(self.db.get_dnamatch_handles())[0])
+        test_handles = set(self.db.get_dnatest_handles())
+        self.assertIn(dm.get_subject_test_handle(), test_handles)
+        self.assertIn(dm.get_match_test_handle(), test_handles)
+
+
 if __name__ == "__main__":
     unittest.main()
