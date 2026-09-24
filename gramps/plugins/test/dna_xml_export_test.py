@@ -89,9 +89,7 @@ class TestDNARoundTrip(unittest.TestCase):
         finally:
             db.close()
         imported = import_as_dict(filename, User())
-        cls.read = {
-            obj.handle: object_to_dict(obj) for obj in imported.iter_dnatests()
-        }
+        cls.read = {obj.handle: object_to_dict(obj) for obj in imported.iter_dnatests()}
         cls.read.update(
             (obj.handle, object_to_dict(obj)) for obj in imported.iter_dnamatches()
         )
