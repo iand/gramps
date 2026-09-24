@@ -58,7 +58,13 @@ from gramps.gen.const import GRAMPS_LOCALE as glocale
 
 _ = glocale.translation.gettext
 from gramps.gen.const import URL_NS
-from gramps.gen.lib import Date, DNAGenomeBuildType, DNAProviderType, Person
+from gramps.gen.lib import (
+    Date,
+    DNAGenomeBuildType,
+    DNAProviderType,
+    DNATestType,
+    Person,
+)
 from gramps.gen.updatecallback import UpdateCallback
 from gramps.gen.db.exceptions import DbWriteFailure
 from gramps.version import VERSION
@@ -1431,21 +1437,23 @@ class GrampsXmlWriter(UpdateCallback):
                 '%s<person hlink="_%s"/>\n' % (sp2, dnatest.get_person_handle())
             )
         self.write_line("account_name", dnatest.get_account_name(), index + 1)
-        provider = dnatest.get_provider().xml_str()
-        if provider:
-            self.g.write("%s<provider>%s</provider>\n" % (sp2, self.fix(provider)))
-        self.write_line("kit_id", dnatest.get_kit_id(), index + 1)
-        test_type = dnatest.get_test_type().xml_str()
-        if test_type:
-            self.g.write("%s<test_type>%s</test_type>\n" % (sp2, self.fix(test_type)))
-        genome_build = dnatest.get_genome_build().xml_str()
-        if genome_build:
+        if dnatest.get_provider() != DNAProviderType.UNKNOWN:
             self.g.write(
-                "%s<genome_build>%s</genome_build>\n" % (sp2, self.fix(genome_build))
+                "%s<provider>%s</provider>\n"
+                % (sp2, self.fix(dnatest.get_provider().xml_str()))
             )
-        dval = dnatest.get_date_object()
-        if not dval.is_empty():
-            self.write_date(dval, index + 1)
+        self.write_line("kit_id", dnatest.get_kit_id(), index + 1)
+        if dnatest.get_test_type() != DNATestType.UNKNOWN:
+            self.g.write(
+                "%s<test_type>%s</test_type>\n"
+                % (sp2, self.fix(dnatest.get_test_type().xml_str()))
+            )
+        if dnatest.get_genome_build() != DNAGenomeBuildType.UNKNOWN:
+            self.g.write(
+                "%s<genome_build>%s</genome_build>\n"
+                % (sp2, self.fix(dnatest.get_genome_build().xml_str()))
+            )
+        self.write_date(dnatest.get_date_object(), index + 1)
         self.write_line("y_haplogroup", dnatest.get_y_haplogroup(), index + 1)
         self.write_line("mt_haplogroup", dnatest.get_mt_haplogroup(), index + 1)
         self.write_dna_attribute_list(dnatest.get_attribute_list(), index + 1)
@@ -1485,17 +1493,17 @@ class GrampsXmlWriter(UpdateCallback):
             )
         if dnamatch.get_shared_cm():
             self.g.write(
-                '%s<shared_cm val="%.6g"/>\n' % (sp2, dnamatch.get_shared_cm())
+                '%s<shared_cm val="%r"/>\n' % (sp2, float(dnamatch.get_shared_cm()))
             )
         if dnamatch.get_shared_cm_weighted():
             self.g.write(
-                '%s<shared_cm_weighted val="%.6g"/>\n'
-                % (sp2, dnamatch.get_shared_cm_weighted())
+                '%s<shared_cm_weighted val="%r"/>\n'
+                % (sp2, float(dnamatch.get_shared_cm_weighted()))
             )
         if dnamatch.get_percent_shared():
             self.g.write(
-                '%s<percent_shared val="%.6g"/>\n'
-                % (sp2, dnamatch.get_percent_shared())
+                '%s<percent_shared val="%r"/>\n'
+                % (sp2, float(dnamatch.get_percent_shared()))
             )
         if dnamatch.get_segment_count():
             self.g.write(
@@ -1503,19 +1511,19 @@ class GrampsXmlWriter(UpdateCallback):
             )
         if dnamatch.get_largest_segment_cm():
             self.g.write(
-                '%s<largest_segment_cm val="%.6g"/>\n'
-                % (sp2, dnamatch.get_largest_segment_cm())
+                '%s<largest_segment_cm val="%r"/>\n'
+                % (sp2, float(dnamatch.get_largest_segment_cm()))
             )
         if dnamatch.get_largest_segment_cm_weighted():
             self.g.write(
-                '%s<largest_segment_cm_weighted val="%.6g"/>\n'
-                % (sp2, dnamatch.get_largest_segment_cm_weighted())
+                '%s<largest_segment_cm_weighted val="%r"/>\n'
+                % (sp2, float(dnamatch.get_largest_segment_cm_weighted()))
             )
         for rel in dnamatch.get_predicted_relationship_list():
             self.g.write(
                 '%s<predicted_relationship subject_mrca_gens="%d"'
                 ' subject_side="%d" match_mrca_gens="%d" match_side="%d"'
-                ' full_or_half="%d" probability="%.6g">\n'
+                ' full_or_half="%d" probability="%r">\n'
                 % (
                     sp2,
                     rel.get_subject_mrca_gens(),
@@ -1523,7 +1531,7 @@ class GrampsXmlWriter(UpdateCallback):
                     rel.get_match_mrca_gens(),
                     rel.get_match_side(),
                     rel.get_full_or_half(),
-                    rel.get_probability(),
+                    float(rel.get_probability()),
                 )
             )
             self.write_line("description", rel.get_description(), index + 2)
@@ -1548,8 +1556,8 @@ class GrampsXmlWriter(UpdateCallback):
         for seg in dnamatch.get_segment_list():
             extra_attrs = ""
             if seg.get_shared_cm_weighted():
-                extra_attrs += (
-                    ' shared_cm_weighted="%.6g"' % seg.get_shared_cm_weighted()
+                extra_attrs += ' shared_cm_weighted="%r"' % float(
+                    seg.get_shared_cm_weighted()
                 )
             if seg.get_ibd_state():
                 extra_attrs += ' ibd_state="%d"' % seg.get_ibd_state()
@@ -1563,13 +1571,13 @@ class GrampsXmlWriter(UpdateCallback):
                 extra_attrs += ' end_rsid="%s"' % self.fix(seg.get_end_rsid())
             self.g.write(
                 '%s<dna_segment chromosome="%s" start_bp="%d" end_bp="%d"'
-                ' shared_cm="%.6g" snp_count="%d" origin="%d"%s/>\n'
+                ' shared_cm="%r" snp_count="%d" origin="%d"%s/>\n'
                 % (
                     sp2,
                     self.fix(seg.get_chromosome()),
                     seg.get_start_bp(),
                     seg.get_end_bp(),
-                    seg.get_shared_cm(),
+                    float(seg.get_shared_cm()),
                     seg.get_snp_count(),
                     seg.get_origin(),
                     extra_attrs,
